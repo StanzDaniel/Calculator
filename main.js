@@ -1,6 +1,6 @@
 class Memory {
   store = "0";
-  
+
   getMemory() {
     return this.store;
   }
@@ -12,7 +12,7 @@ class Memory {
   setMemory(value) {
     if (this.store == "0" && isNaN(value)) {
       this.store = this.store;
-    } else if (this.store  == "0") {
+    } else if (this.store == "0") {
       this.store = value;
     } else if (this.store[this.store.length - 1] == value && isNaN(value)) {
       this.store = this.store;
@@ -24,44 +24,47 @@ class Memory {
   }
 }
 
+const memory = new Memory();
 
-const memory = new Memory;
-
-const buttons = [ ...document.getElementsByClassName("btn") ];
-buttons.map((btn) => btn.addEventListener("click", (e) => getData(e.target.value)));
-
+const buttons = [...document.getElementsByClassName("btn")];
+buttons.map((btn) =>
+  btn.addEventListener("click", (e) => getData(e.target.value))
+);
 
 function getData(value) {
   switch (value) {
-    case "clear": {
-      memory.clearMemory(); 
+    case "clear":
+      memory.clearMemory();
       break;
-    }
-    case ".": {
-      if ( memory.getMemory() == "0" ) {
-        memory.setMemory("0.");
-        break;
-      } 
-      memory.setMemory(".");
+    case "dot":
+      dot();
       break;
-    }  
-    case "percent": {
-      if ( memory.getMemory() ) {
-        const percent = memory.getMemory() / 100;
-        memory.clearMemory();
-        memory.setMemory(percent.toString());
-      }
+    case "percent":
+      percent();
       break;
-    }
-    case "equal": {
+    case "equal":
       equal();
       return;
-    }
     default:
       memory.setMemory(value);
-      break;
   }
   display();
+}
+
+function percent() {
+  if (memory.getMemory()) {
+    const percent = memory.getMemory() / 100;
+    memory.clearMemory();
+    memory.setMemory(percent.toString());
+  }
+}
+
+function dot() {
+  if (memory.getMemory() == "0") {
+    memory.setMemory("0.");
+  } else {
+    memory.setMemory(".");
+  }
 }
 
 function equal() {
@@ -72,8 +75,7 @@ function equal() {
   memory.clearMemory();
 }
 
-
 function display() {
   const data = memory.getMemory();
-  document.getElementById('display').innerText = data;
+  document.getElementById("display").innerText = data;
 }
