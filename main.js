@@ -1,12 +1,15 @@
-class MemorySetter {
-  constructor() {};
+class Memory {
+  store = "0";
+  
+  getMemory() {
+    return this.store;
+  }
 
   clearMemory() {
     this.store = "0";
   }
 
   setMemory(value) {
-    console.log(this.store)
     if (this.store == "0" && isNaN(value)) {
       this.store = this.store;
     } else if (this.store  == "0") {
@@ -16,28 +19,20 @@ class MemorySetter {
     } else if (isNaN(this.store[this.store.length - 1]) && isNaN(value)) {
       this.store = this.store.slice(0, this.store.length - 1) + value;
     } else {
-      this.store = this.store + value;
+      this.store += value;
     }
   }
 }
 
-class Memory extends MemorySetter {
-  store = "0";
-  
-  constructor() {
-    super();
-  };
-  
-  getMemory() {
-    return this.store;
-  }
-}
 
 const memory = new Memory;
-const screen = document.getElementById('display');
 
-function getData(e) {
-  switch (e) {
+const buttons = [ ...document.getElementsByClassName("btn") ];
+buttons.map((btn) => btn.addEventListener("click", (e) => getData(e.target.value)));
+
+
+function getData(value) {
+  switch (value) {
     case "clear": {
       memory.clearMemory(); 
       break;
@@ -58,19 +53,16 @@ function getData(e) {
       }
       break;
     }
+    case "equal": {
+      equal();
+      return;
+    }
     default:
-      memory.setMemory(e);
+      memory.setMemory(value);
       break;
   }
   display();
 }
-
-
-function display() {
-  const data = memory.getMemory();
-  screen.innerText = data;
-}
-
 
 function equal() {
   const equal = eval(memory.getMemory()).toFixed(2);
@@ -78,4 +70,10 @@ function equal() {
   memory.setMemory(parseFloat(equal));
   display();
   memory.clearMemory();
+}
+
+
+function display() {
+  const data = memory.getMemory();
+  document.getElementById('display').innerText = data;
 }
