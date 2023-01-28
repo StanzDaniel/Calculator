@@ -32,6 +32,7 @@ buttons.map((btn) =>
 );
 
 function getData(value) {
+  vibrate();
   switch (value) {
     case "clear":
       memory.clearMemory();
@@ -78,4 +79,8 @@ function equal() {
 function display() {
   const data = memory.getMemory();
   document.getElementById("display").innerText = data;
+}
+
+function vibrate() {
+  window.navigator.vibrate(18); // vibrate for smartphone devices
 }
