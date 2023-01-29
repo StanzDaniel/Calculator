@@ -46,6 +46,12 @@ function getData(value) {
     case "equal":
       equal();
       return;
+    case "changeSignal":
+      const changed = changeSignal(memory.getMemory())
+      memory.clearMemory();
+      memory.setMemory(changed.toString());
+      display();
+      break;
     default:
       memory.setMemory(value);
   }
@@ -66,6 +72,14 @@ function dot() {
   } else {
     memory.setMemory(".");
   }
+}
+
+function changeSignal(state) {
+  if ( Math.sign(state) == -1 ) {
+    return Math.abs(state);
+  }
+  const a = state * 2;
+  return state - a;
 }
 
 function equal() {
