@@ -1,15 +1,12 @@
-class Memory {
-  store = "0";
-
-  getMemory() {
+const memory = {
+  store: "0",
+  getter: function () {
     return this.store;
-  }
-
-  clearMemory() {
+  },
+  reseter: function () {
     this.store = "0";
-  }
-
-  setMemory(value) {
+  },
+  setter: function (value) {
     if (this.store == "0" && isNaN(value)) {
       this.store = this.store;
     } else if (this.store == "0") {
@@ -21,78 +18,84 @@ class Memory {
     } else {
       this.store += value;
     }
-  }
-}
-
-const memory = new Memory();
+  },
+};
 
 const buttons = [...document.getElementsByClassName("btn")];
+
 buttons.map((btn) =>
   btn.addEventListener("click", (e) => getData(e.target.value))
 );
 
 function getData(value) {
   vibrate();
+
   switch (value) {
     case "clear":
-      memory.clearMemory();
+      memory.reseter();
       break;
+
     case "dot":
-      dot();
+      const dotted = dot(memory.getter());
+      memory.setter(dotted);
       break;
+
     case "percent":
-      percent();
+      const percentual = percent(memory.getter());
+      memory.reseter();
+      memory.setter(percentual.toString());
       break;
+
     case "equal":
-      equal();
+      const equalized = equal(memory.getter());
+      memory.reseter();
+      memory.setter(equalized.toString());
+      display(memory.getter());
+      memory.reseter();
       return;
+
     case "changeSignal":
-      const changed = changeSignal(memory.getMemory())
-      memory.clearMemory();
-      memory.setMemory(changed.toString());
-      display();
+      const changed = changeSignal(memory.getter());
+      memory.reseter();
+      memory.setter(changed.toString());
       break;
+
     default:
-      memory.setMemory(value);
+      memory.setter(value);
   }
-  display();
+
+  display(memory.getter());
 }
 
-function percent() {
-  if (memory.getMemory()) {
-    const percent = memory.getMemory() / 100;
-    memory.clearMemory();
-    memory.setMemory(percent.toString());
+function percent(state) {
+  if (state) {
+    const percent = state / 100;
+    return percent;
   }
 }
 
-function dot() {
-  if (memory.getMemory() == "0") {
-    memory.setMemory("0.");
-  } else {
-    memory.setMemory(".");
+function dot(state) {
+  if (state == "0") {
+    return "0.";
   }
+  return ".";
 }
 
 function changeSignal(state) {
-  if ( Math.sign(state) == -1 ) {
+  if (Math.sign(state) == -1) {
     return Math.abs(state);
   }
   const a = state * 2;
   return state - a;
 }
 
-function equal() {
-  const equal = eval(memory.getMemory()).toFixed(2);
-  memory.clearMemory();
-  memory.setMemory(parseFloat(equal));
-  display();
-  memory.clearMemory();
+function equal(state) {
+  const equal = eval(state).toFixed(2);
+  return parseFloat(equal);
 }
 
-function display() {
-  const data = memory.getMemory();
-  document.getElementById("display").innerText = data;
+function display(state) {
+  document.getElementById("display").innerText = state;
 }
 
 function vibrate() {
