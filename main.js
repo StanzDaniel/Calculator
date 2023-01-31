@@ -37,6 +37,7 @@ function getData(value) {
 
     case "dot":
       const dotted = dot(memory.getter());
+      memory.reseter();
       memory.setter(dotted);
       break;
 
@@ -78,7 +79,7 @@ function dot(state) {
   if (state == "0") {
     return "0.";
   }
-  return ".";
+  return state + ".";
 }
 
 function changeSignal(state) {
